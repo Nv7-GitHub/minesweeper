@@ -37,17 +37,25 @@ fn main() {
 
     // Solve
     println!("{}", board);
-    while !board.finished() {
+    while board.unopened() != MINES {
+        // Progress
+        let unopen = board.unopened();
+        println!("{} Remaining ({:.2}%)", unopen-MINES, (ROWS*COLS - unopen) as f32/(ROWS*COLS - MINES) as f32 * 100.0);
+
+        // Iteration
         let pos = solve_iter(&board);
+
+        // Click and check for mine
         if board.click(pos.0, pos.1) { // Clicked on a mine
-            println!("{}", board);
+            println!("\n{}", board);
             println!("MINE CLICKED");
             break;
         };
     }
-
-    if board.finished() {
-        println!("{}", board);
+    
+    // Success
+    if board.unopened() == MINES {
+        println!("\n{}", board);
         println!("SOLVED")
     }
 }

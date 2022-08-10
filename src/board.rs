@@ -4,8 +4,7 @@ use rand::Rng;
 
 pub const COLS: usize = 24;
 pub const ROWS: usize = 20;
-
-const MINES: usize = 99;
+pub const MINES: usize = 99;
 
 pub struct Board {
   pub open: [[bool; COLS]; ROWS],
@@ -89,7 +88,7 @@ impl Board {
     }
   }
 
-  pub fn finished(&self) -> bool {
+  pub fn unopened(&self) -> usize {
     let mut unopen = 0;
     for r in 0..ROWS {
       for c in 0..COLS {
@@ -99,7 +98,7 @@ impl Board {
       }
     }
 
-    unopen == MINES
+    unopen
   }
 }
 
