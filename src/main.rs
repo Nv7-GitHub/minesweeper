@@ -1,4 +1,6 @@
 mod board;
+use std::time::Instant;
+
 use board::*;
 
 mod solve;
@@ -37,10 +39,13 @@ fn main() {
 
     // Solve
     println!("{}", board);
+    let mut time = Instant::now();
+    let start = Instant::now();
     while board.unopened() != MINES {
         // Progress
         let unopen = board.unopened();
-        println!("{} Remaining ({:.2}%)", unopen-MINES, (ROWS*COLS - unopen) as f32/(ROWS*COLS - MINES) as f32 * 100.0);
+        println!("{} Remaining ({:.2}%) (iteration time: {:.2?})", unopen-MINES, (ROWS*COLS - unopen) as f32/(ROWS*COLS - MINES) as f32 * 100.0, time.elapsed());
+        time = Instant::now();
 
         // Iteration
         let pos = solve_iter(&board);
@@ -48,7 +53,7 @@ fn main() {
         // Click and check for mine
         if board.click(pos.0, pos.1) { // Clicked on a mine
             println!("\n{}", board);
-            println!("MINE CLICKED");
+            println!("MINE CLICKED (time: {:.2?})", start.elapsed());
             break;
         };
     }
@@ -56,6 +61,6 @@ fn main() {
     // Success
     if board.unopened() == MINES {
         println!("\n{}", board);
-        println!("SOLVED")
+        println!("SOLVED (time: {:.2?})", start.elapsed())
     }
 }
