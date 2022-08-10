@@ -2,10 +2,10 @@ use std::fmt::Display;
 
 use rand::Rng;
 
-pub const COLS: usize = 10;
-pub const ROWS: usize = 8;
+pub const COLS: usize = 24;
+pub const ROWS: usize = 20;
 
-const MINES: usize = 10;
+const MINES: usize = 99;
 
 pub struct Board {
   pub open: [[bool; COLS]; ROWS],
@@ -109,7 +109,7 @@ impl Display for Board {
         for c in 0..COLS {
           if self.open[r][c] {
             if self.internalmines[r][c] {
-              write!(f, "B")?;  
+              write!(f, "\x1b[31;1mB\x1b[0m")?;  
             } else {
               write!(f, "{}", self.nums[r][c])?;
             }
