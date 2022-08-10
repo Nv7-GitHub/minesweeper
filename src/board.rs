@@ -5,10 +5,11 @@ use rand::Rng;
 pub const COLS: usize = 10;
 pub const ROWS: usize = 8;
 
+const MINES: usize = 10;
+
 pub struct Board {
   pub open: [[bool; COLS]; ROWS],
   pub nums: [[u8; COLS]; ROWS],
-  pub flags: [[bool; COLS]; ROWS],
 
   // These will be removed and the board will be updated through google minesweeper instead
   internalnums: [[u8; COLS]; ROWS],
@@ -17,16 +18,16 @@ pub struct Board {
 
 impl Board {
   pub fn new() -> Self {
-    let mut v = Self { open: [[false; COLS]; ROWS], nums: [[0; COLS]; ROWS], flags: [[false; COLS]; ROWS], internalnums: [[0; COLS]; ROWS], internalmines: [[false; COLS]; ROWS] };
+    let mut v = Self { open: [[false; COLS]; ROWS], nums: [[0; COLS]; ROWS], internalnums: [[0; COLS]; ROWS], internalmines: [[false; COLS]; ROWS] };
     v.geninternal();
     v
   }
 
-  pub fn click(&mut self, row: usize, col: usize) {
+  pub fn click(&mut self, row: usize, col: usize) -> bool { // Returns whether mine clicked
     // This code will be replaced by screen clicking code & image processing to find new state of board after click
     self.open[row][col] = true;
     if self.internalmines[row][col] {
-      panic!("mine clicked!")
+      return true;
     }
     self.nums[row][col] = self.internalnums[row][col];
 
@@ -47,27 +48,21 @@ impl Board {
         }
       }
     }
-  }
 
-  pub fn flag(&mut self, row: usize, col: usize) {
-    // Screen clicking will be added to this
-    self.flags[row][col] = true;
+    false
   }
 
   fn geninternal(&mut self) {
     // Place mines
     let mut rng = rand::thread_rng();
-    const MINES: usize = 10;
-    let mut mines = 0;
-    'outer: for r in 0..ROWS {
-      for c in 0..COLS {
-        let v: bool = rng.gen_bool(MINES as f64 / (COLS * ROWS) as f64);
-        if v {
+    for _ in 0..MINES {
+      let mut worked = false;
+      while !worked {
+        let r = rng.gen_range(0..ROWS);
+        let c = rng.gen_range(0..COLS);
+        if !self.internalmines[r][c] {
+          worked = true;
           self.internalmines[r][c] = true;
-          mines += 1;
-          if mines >= MINES {
-            break 'outer;
-          }
         }
       }
     }
@@ -93,6 +88,19 @@ impl Board {
       }
     }
   }
+
+  pub fn finished(&self) -> bool {
+    let mut unopen = 0;
+    for r in 0..ROWS {
+      for c in 0..COLS {
+        if !self.open[r][c] {
+          unopen += 1;
+        }
+      }
+    }
+
+    unopen == MINES
+  }
 }
 
 impl Display for Board {
@@ -100,7 +108,11 @@ impl Display for Board {
       for r in 0..ROWS {
         for c in 0..COLS {
           if self.open[r][c] {
-            write!(f, "{}", self.nums[r][c])?;
+            if self.internalmines[r][c] {
+              write!(f, "💣")?;  
+            } else {
+              write!(f, "{}", self.nums[r][c])?;
+            }
           } else {
             write!(f, "█")?;
           }
