@@ -109,7 +109,7 @@ impl Display for Board {
         for c in 0..COLS {
           if self.open[r][c] {
             if self.internalmines[r][c] {
-              write!(f, "💣")?;  
+              write!(f, "B")?;  
             } else {
               write!(f, "{}", self.nums[r][c])?;
             }

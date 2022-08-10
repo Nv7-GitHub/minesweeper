@@ -40,11 +40,14 @@ fn main() {
     while !board.finished() {
         let pos = solve_iter(&board);
         if board.click(pos.0, pos.1) { // Clicked on a mine
+            println!("{}", board);
             println!("MINE CLICKED");
             break;
         };
     }
-    
-    println!("{}", board);
-    println!("SOLVED")
+
+    if board.finished() {
+        println!("{}", board);
+        println!("SOLVED")
+    }
 }
