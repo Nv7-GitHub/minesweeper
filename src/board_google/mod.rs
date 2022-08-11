@@ -3,9 +3,9 @@ use detect::*;
 use enigo::*;
 use std::fmt::Display;
 
-pub const COLS: usize = 18;
-pub const ROWS: usize = 14;
-pub const MINES: usize = 40;
+pub const COLS: usize = 24;
+pub const ROWS: usize = 20;
+pub const MINES: usize = 99;
 pub const GOOGLE: bool = true;
 
 pub struct Board {
@@ -42,13 +42,13 @@ impl Board {
 
   fn click_pos(&mut self, row: usize, col: usize) {
     self.enigo.mouse_move_to(((self.start.0 + (self.sqsize * col as i32) + (self.sqsize/2)) as f32 * self.scale.0) as i32, ((self.start.1 + (self.sqsize * row as i32) + (self.sqsize/2)) as f32 * self.scale.1) as i32);
+    std::thread::sleep(std::time::Duration::from_millis(50));
     self.enigo.mouse_click(MouseButton::Left);
   }
 
   pub fn click(&mut self, row: usize, col: usize) -> bool { // Returns whether mine clicked
     // Click
     self.click_pos(row, col);
-    std::thread::sleep(std::time::Duration::from_millis(50));
 
     // Move mouse away to open spot where it won't interfere with number detection
     'outer: for r in 0..ROWS {
@@ -59,7 +59,8 @@ impl Board {
         }
       }
     }
-    std::thread::sleep(std::time::Duration::from_millis(10));
+
+    std::thread::sleep(std::time::Duration::from_millis(50));
 
     // Re-detect
     self.detect();
