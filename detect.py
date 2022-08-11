@@ -4,11 +4,11 @@ import numpy as np
 BUF = 5 # Buffer area on side of each crop
 
 # Consts
-COLS = 10
-ROWS = 8
+COLS = 18
+ROWS = 14
 
 # Screenshot of minesweeper game
-img = cv2.imread("image.png")
+img = cv2.imread("screen.png")
 
 # Detect green square
 lower = np.array([48, 0, 0])
@@ -17,7 +17,6 @@ upper = np.array([52, 200, 255])
 # In range, get bounding box of top
 imghsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 top = cv2.inRange(imghsv, lower, upper)
-cv2.imwrite("top.png", top)
 cont, _ = cv2.findContours(top, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 cont = max(cont, key=cv2.contourArea)
 box = cv2.boundingRect(cont)

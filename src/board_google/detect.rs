@@ -8,8 +8,6 @@ use ordered_float::OrderedFloat;
 
 use super::*;
 
-const BUF: i32 = 5; // Buffer fromm edges
-
 pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32) { // (board, start, sqsize)
   let scr = screenshots::Screen::all().unwrap()[0];
   let img = scr.capture().unwrap();
@@ -45,6 +43,7 @@ pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32) { // (board, start, sqsize)
     // TODO: 8
     (9, core::Vec3b::from([40, 100, 0]), core::Vec3b::from([45, 255, 255])), // Green
   ];
+  let buf = sqsize/6;
 
   // Create cropped squares
   let mut board = Vec::with_capacity(ROWS);
@@ -52,7 +51,7 @@ pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32) { // (board, start, sqsize)
     let mut row = Vec::with_capacity(COLS);
     for c in 0..COLS {
       // Crop & calc num
-      let crop = Mat::roi(&img, core::Rect::new(start.0 as i32 + c as i32*sqsize + BUF, start.1 + r as i32*sqsize + BUF, sqsize - BUF, sqsize - BUF)).unwrap();
+      let crop = Mat::roi(&img, core::Rect::new(start.0 as i32 + c as i32*sqsize + buf, start.1 + r as i32*sqsize + buf, sqsize - buf, sqsize - buf)).unwrap();
       let mut crophsv = Mat::default();
       imgproc::cvt_color(&crop, &mut crophsv, imgproc::COLOR_BGR2HSV, 0).unwrap();
       let mut num = 0;

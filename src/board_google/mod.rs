@@ -3,9 +3,9 @@ use detect::*;
 use enigo::*;
 use std::fmt::Display;
 
-pub const COLS: usize = 10;
-pub const ROWS: usize = 8;
-pub const MINES: usize = 10;
+pub const COLS: usize = 18;
+pub const ROWS: usize = 14;
+pub const MINES: usize = 40;
 pub const GOOGLE: bool = true;
 
 pub struct Board {
@@ -38,13 +38,26 @@ impl Board {
     self.sqsize = res.2;
   }
 
-  pub fn click(&mut self, row: usize, col: usize) -> bool { // Returns whether mine clicked
-    // Click
+  fn click_pos(&mut self, row: usize, col: usize) {
     self.enigo.mouse_move_to(self.start.0 + (self.sqsize * col as i32) + (self.sqsize/2), self.start.1 + (self.sqsize * row as i32) + (self.sqsize/2));
     self.enigo.mouse_click(MouseButton::Left);
+  }
 
-    // Wait
-    std::thread::sleep(std::time::Duration::from_millis(500));
+  pub fn click(&mut self, row: usize, col: usize) -> bool { // Returns whether mine clicked
+    // Click
+    self.click_pos(row, col);
+    std::thread::sleep(std::time::Duration::from_millis(10));
+
+    // Move mouse away to open spot where it won't interfere with number detection
+    'outer: for r in 0..ROWS {
+      for c in 0..COLS {
+        if self.open[r][c] && self.nums[r][c] == 0 {
+          self.click_pos(r, c);
+          break 'outer;
+        }
+      }
+    }
+    std::thread::sleep(std::time::Duration::from_millis(10));
 
     // Re-detect
     self.detect();
