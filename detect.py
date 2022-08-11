@@ -11,12 +11,13 @@ ROWS = 8
 img = cv2.imread("pic.png")
 
 # Detect green square
-lower = np.array([48, 140, 110])
-upper = np.array([52, 150, 130])
+lower = np.array([48, 150, 0])
+upper = np.array([52, 200, 255])
 
 # In range, get bounding box of top
 imghsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 top = cv2.inRange(imghsv, lower, upper)
+cv2.imwrite("top.png", top)
 cont, _ = cv2.findContours(top, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 cont = max(cont, key=cv2.contourArea)
 box = cv2.boundingRect(cont)
