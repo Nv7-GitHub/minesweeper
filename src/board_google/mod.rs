@@ -1,5 +1,6 @@
 mod detect;
 use detect::*;
+use enigo::*;
 use std::fmt::Display;
 
 pub const COLS: usize = 10;
@@ -13,11 +14,12 @@ pub struct Board {
 
   start: (i32, i32), // top-left of grid
   sqsize: i32,
+  enigo: Enigo,
 }
 
 impl Board {
   pub fn new() -> Self {
-    let mut v = Self { open: [[false; COLS]; ROWS], nums: [[0; COLS]; ROWS], start: (0, 0), sqsize: 0 };
+    let mut v = Self { open: [[false; COLS]; ROWS], nums: [[0; COLS]; ROWS], start: (0, 0), sqsize: 0, enigo: Enigo::new() };
     v.detect();
     v
   }
@@ -28,7 +30,7 @@ impl Board {
       for c in 0..COLS {
         match res.0[r][c] {
           9 => {self.open[r][c] = false},
-          _ => {self.nums[r][c] = res.0[r][c]}
+          _ => {self.nums[r][c] = res.0[r][c]; self.open[r][c] = true;}
         }
       }
     }
@@ -37,7 +39,15 @@ impl Board {
   }
 
   pub fn click(&mut self, row: usize, col: usize) -> bool { // Returns whether mine clicked
-    todo!("unimplemented");
+    // Click
+    self.enigo.mouse_move_to(self.start.0 + (self.sqsize * col as i32) + (self.sqsize/2), self.start.1 + (self.sqsize * row as i32) + (self.sqsize/2));
+    self.enigo.mouse_click(MouseButton::Left);
+
+    // Wait
+    std::thread::sleep(std::time::Duration::from_millis(500));
+
+    // Re-detect
+    self.detect();
 
     false
   }
