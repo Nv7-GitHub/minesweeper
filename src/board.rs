@@ -2,9 +2,9 @@ use std::fmt::Display;
 
 use rand::Rng;
 
-pub const COLS: usize = 24;
-pub const ROWS: usize = 20;
-pub const MINES: usize = 99;
+pub const COLS: usize = 10;
+pub const ROWS: usize = 8;
+pub const MINES: usize = 10;
 
 pub struct Board {
   pub open: [[bool; COLS]; ROWS],
