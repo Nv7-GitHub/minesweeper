@@ -8,10 +8,10 @@ COLS = 10
 ROWS = 8
 
 # Screenshot of minesweeper game
-img = cv2.imread("pic.png")
+img = cv2.imread("image.png")
 
 # Detect green square
-lower = np.array([48, 150, 0])
+lower = np.array([48, 0, 0])
 upper = np.array([52, 200, 255])
 
 # In range, get bounding box of top
@@ -24,7 +24,7 @@ box = cv2.boundingRect(cont)
 
 # Get size of squares and top-left corner
 sqsize = box[2]//COLS # width of box/COLS
-start = (box[1] + box[3], box[0]) # (col + height), row
+start = (box[1] + box[3], box[0]) # (row + height), col
 
 # Cut
 imgs = []

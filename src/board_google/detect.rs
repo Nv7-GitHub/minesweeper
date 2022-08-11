@@ -13,7 +13,7 @@ use scrap::{Capturer, Display};
 
 const BUF: i32 = 5; // Buffer fromm edges
 
-pub fn detect() -> Vec<Vec<u8>> {
+pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32) { // (board, start, sqsize)
   // Init capture
   let display = Display::primary().unwrap();
   let mut cap = Capturer::new(display).unwrap();
@@ -111,6 +111,6 @@ pub fn detect() -> Vec<Vec<u8>> {
       board.push(row);
     }
 
-    return board;
+    return (board, start, sqsize);
   }
 }

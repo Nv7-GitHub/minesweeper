@@ -1,37 +1,46 @@
-mod board;
-use std::time::Instant;
+use std::time::{Duration, Instant};
 
-use board::*;
+/*mod board;
+use board::*;*/
+mod board_google;
+use board_google::*;
 
 mod solve;
 use solve::*;
 
 fn main() {
     let mut board: Board;
-
-    'makeboard: loop {
+    if GOOGLE {
+        println!("Waiting....");
+        std::thread::sleep(Duration::from_secs(5));
+        println!("Started!");
         board = Board::new();
-
-        // Open up board
-        let mut clicks = 0;
-        for r in 0..ROWS {
-            for c in 0..COLS {
-                if board.click(r, c) {
-                    continue 'makeboard; // Clicked a mine, try another board
-                }
-                clicks += 1;
-                
-                // Count open
-                let mut open = 0;
-                for r in 0..ROWS {
-                    for c in 0..COLS {
-                        if board.open[r][c] {
-                            open += 1;
+    } else {
+        // Keep on generating boards until one opens well (you reach a 0 and floodfill open)
+        'makeboard: loop {
+            board = Board::new();
+    
+            // Open up board
+            let mut clicks = 0;
+            for r in 0..ROWS {
+                for c in 0..COLS {
+                    if board.click(r, c) {
+                        continue 'makeboard; // Clicked a mine, try another board
+                    }
+                    clicks += 1;
+                    
+                    // Count open
+                    let mut open = 0;
+                    for r in 0..ROWS {
+                        for c in 0..COLS {
+                            if board.open[r][c] {
+                                open += 1;
+                            }
                         }
                     }
-                }
-                if open > clicks { // Board opened up
-                    break 'makeboard;
+                    if open > clicks { // Board opened up
+                        break 'makeboard;
+                    }
                 }
             }
         }

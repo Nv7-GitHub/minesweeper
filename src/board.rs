@@ -5,6 +5,7 @@ use rand::Rng;
 pub const COLS: usize = 10;
 pub const ROWS: usize = 8;
 pub const MINES: usize = 10;
+pub const GOOGLE: bool = false;
 
 pub struct Board {
   pub open: [[bool; COLS]; ROWS],
