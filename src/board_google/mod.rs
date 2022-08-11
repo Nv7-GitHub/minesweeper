@@ -14,12 +14,13 @@ pub struct Board {
 
   start: (i32, i32), // top-left of grid
   sqsize: i32,
+  scale: (f32, f32),
   enigo: Enigo,
 }
 
 impl Board {
   pub fn new() -> Self {
-    let mut v = Self { open: [[false; COLS]; ROWS], nums: [[0; COLS]; ROWS], start: (0, 0), sqsize: 0, enigo: Enigo::new() };
+    let mut v = Self { open: [[false; COLS]; ROWS], nums: [[0; COLS]; ROWS], start: (0, 0), sqsize: 0, scale: (0.0, 0.0), enigo: Enigo::new() };
     v.detect();
     v
   }
@@ -36,17 +37,18 @@ impl Board {
     }
     self.start = res.1;
     self.sqsize = res.2;
+    self.scale = res.3;
   }
 
   fn click_pos(&mut self, row: usize, col: usize) {
-    self.enigo.mouse_move_to(self.start.0 + (self.sqsize * col as i32) + (self.sqsize/2), self.start.1 + (self.sqsize * row as i32) + (self.sqsize/2));
+    self.enigo.mouse_move_to(((self.start.0 + (self.sqsize * col as i32) + (self.sqsize/2)) as f32 * self.scale.0) as i32, ((self.start.1 + (self.sqsize * row as i32) + (self.sqsize/2)) as f32 * self.scale.1) as i32);
     self.enigo.mouse_click(MouseButton::Left);
   }
 
   pub fn click(&mut self, row: usize, col: usize) -> bool { // Returns whether mine clicked
     // Click
     self.click_pos(row, col);
-    std::thread::sleep(std::time::Duration::from_millis(10));
+    std::thread::sleep(std::time::Duration::from_millis(50));
 
     // Move mouse away to open spot where it won't interfere with number detection
     'outer: for r in 0..ROWS {

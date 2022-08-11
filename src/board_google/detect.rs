@@ -8,16 +8,15 @@ use ordered_float::OrderedFloat;
 
 use super::*;
 
-pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32) { // (board, start, sqsize)
+pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32, (f32, f32)) { // (board, start, sqsize, scale)
   let scr = screenshots::Screen::all().unwrap()[0];
   let img = scr.capture().unwrap();
   fs::write("screen.png", img.buffer()).unwrap();
 
-  let screen = imgcodecs::imread("screen.png", imgcodecs::IMREAD_COLOR).unwrap();
-  let mut img = Mat::default();
+  let img = imgcodecs::imread("screen.png", imgcodecs::IMREAD_COLOR).unwrap();
 
-  // Resize to display size (important for hiDPI screens)
-  imgproc::resize(&screen, &mut img, core::Size::new(scr.display_info.width as i32, scr.display_info.height as i32), 0.0, 0.0, imgproc::INTER_LINEAR).unwrap();
+  // Calc scale
+  let scale = (scr.display_info.width as f32 / img.cols() as f32, scr.display_info.height as f32 / img.rows() as f32);
 
   // Get bounding box of top
   let mut imghsv = Mat::default();
@@ -70,5 +69,5 @@ pub fn detect() -> (Vec<Vec<u8>>, (i32, i32), i32) { // (board, start, sqsize)
     board.push(row);
   }
 
-  return (board, start, sqsize);
+  return (board, start, sqsize, scale);
 }
