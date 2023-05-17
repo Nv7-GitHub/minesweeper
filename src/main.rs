@@ -1,3 +1,11 @@
+#[macro_use]
+extern crate peroxide;
+use peroxide::prelude::*;
+
+mod board;
+use board::*;
+
 fn main() {
-    println!("Hello, World!")
+    let b = Board::new();
+    println!("{}", b);
 }
