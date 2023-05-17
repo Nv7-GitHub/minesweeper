@@ -6,8 +6,3 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-rand = "0.8.5"
-opencv = "0.66"
-ordered-float = "3.0.0"
-enigo = "0.0.14"
-screenshots = "0.4.3"
