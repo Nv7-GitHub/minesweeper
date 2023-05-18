@@ -62,6 +62,10 @@ impl Board {
         }
         false
     }
+
+    pub fn solved(&self) -> bool {
+        return self.open.iter().map(|v| v.iter().filter(|v| **v).count()).sum::<usize>() == MINES;
+    }
 }
 
 impl std::fmt::Display for Board {
