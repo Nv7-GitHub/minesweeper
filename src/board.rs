@@ -1,15 +1,14 @@
-use super::*;
 use rand::Rng; 
 
-pub const ROWS: usize = 8;
-pub const COLS: usize = 10;
-pub const MINES: usize = 10;
+pub const ROWS: usize = 14;
+pub const COLS: usize = 18;
+pub const MINES: usize = 40;
 
 #[derive(Default)]
 pub struct Board {
     nums: [[usize; COLS]; ROWS],
     mines: [[bool; COLS]; ROWS],
-    open: [[bool; COLS]; ROWS],
+    pub open: [[bool; COLS]; ROWS],
 }
 
 impl Board {
@@ -63,8 +62,16 @@ impl Board {
         false
     }
 
+    pub fn peek(&self, row: usize, col: usize) -> Option<usize> {
+        if self.open[row][col] {
+            Some(self.nums[row][col])
+        } else {
+            None
+        }
+    }
+
     pub fn solved(&self) -> bool {
-        return self.open.iter().map(|v| v.iter().filter(|v| **v).count()).sum::<usize>() == MINES;
+        return self.open.iter().map(|v| v.iter().filter(|v| !**v).count()).sum::<usize>() == MINES;
     }
 }
 

@@ -11,11 +11,19 @@ fn main() {
     let mut pos = (ROWS/2, COLS/2);
     println!("{}", b);
     
-    while !b.click(pos.0, pos.1) {
+    let mut res = b.click(pos.0, pos.1);
+    while !res {
         println!("{}", b);
         if b.solved() {
+            println!("SOLVED!");
             break;
         }
         pos = solve(&mut b);
+        res = b.click(pos.0, pos.1);
+    }
+    println!("{}", b);
+
+    if res {
+        println!("RIP :(");
     }
 }
