@@ -7,7 +7,13 @@ mod solver;
 use solver::solve;
 
 fn main() {
-    let mut b = Board::new();
+    let mut b: Board;
+    loop {
+        b = Board::new();
+        if !b.click(ROWS/2, COLS/2) && b.peek(ROWS/2, COLS/2).unwrap() == 0 {
+            break;
+        }
+    }
     let mut pos = (ROWS/2, COLS/2);
     println!("{}", b);
     

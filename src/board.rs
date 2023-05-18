@@ -8,7 +8,7 @@ pub const MINES: usize = 40;
 pub struct Board {
     nums: [[usize; COLS]; ROWS],
     mines: [[bool; COLS]; ROWS],
-    pub open: [[bool; COLS]; ROWS],
+    open: [[bool; COLS]; ROWS],
 }
 
 impl Board {
