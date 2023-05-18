@@ -69,7 +69,7 @@ pub fn solve(board: &mut Board) -> (usize, usize) {
         }
 
         // If mine, add to mines
-        if numvars >= 1 && m[(i, vars.len())] >= 1.0 && numneg == 0 {
+        if numvars + numneg >= 1 && m[(i, vars.len())] >= 1.0 {
             let var = m.row(i).iter().position(|x| *x == 1.0).unwrap();
             mines.push(var);
         }
@@ -81,7 +81,7 @@ pub fn solve(board: &mut Board) -> (usize, usize) {
             for i in 0..eqs.len() {
                 let numvars = m.row(i).iter().filter(|x| **x == 1.0).count();
                 let numneg = m.row(i).iter().filter(|x| **x < 0.0).count();
-                if numvars == cnt && (numneg == 0 || bad == 1) {
+                if numvars + numneg == cnt && (numneg == 0 || bad == 1) {
                     let var = m.row(i).iter().position(|x| *x == 1.0).unwrap();
                     if mines.contains(&var) {
                         continue;
