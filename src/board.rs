@@ -1,8 +1,8 @@
 use rand::Rng; 
 
-pub const ROWS: usize = 14;
-pub const COLS: usize = 18;
-pub const MINES: usize = 40;
+pub const ROWS: usize = 20;
+pub const COLS: usize = 24;
+pub const MINES: usize = 99;
 
 #[derive(Default)]
 pub struct Board {

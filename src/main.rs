@@ -6,6 +6,8 @@ use board::*;
 mod solver;
 use solver::solve;
 
+use std::time::Instant;
+
 fn main() {
     let mut b: Board;
     loop {
@@ -24,7 +26,9 @@ fn main() {
             println!("SOLVED!");
             break;
         }
+        let start = Instant::now();
         pos = solve(&mut b);
+        println!("Solve time: {:.2?}", start.elapsed());
         res = b.click(pos.0, pos.1);
     }
     println!("{}", b);

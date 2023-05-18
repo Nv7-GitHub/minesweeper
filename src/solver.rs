@@ -86,8 +86,6 @@ pub fn solve(board: &mut Board) -> (usize, usize) {
                     continue;
                 }
                 println!("GUESS");
-                println!("{:?}", mines);
-                println!("{}", var);
                 return vars[var];
             }
         }
