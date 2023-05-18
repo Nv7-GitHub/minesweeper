@@ -1,5 +1,5 @@
-#[macro_use]
-extern crate peroxide;
+/*#[macro_use]
+extern crate peroxide;*/
 
 mod board;
 use board::*;
