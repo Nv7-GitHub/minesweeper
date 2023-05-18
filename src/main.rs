@@ -8,7 +8,7 @@ use solver::solve;
 
 use std::time::Instant;
 
-fn main() {
+fn makegoodboard() -> Board {
     let mut b: Board;
     loop {
         b = Board::new();
@@ -16,6 +16,11 @@ fn main() {
             break;
         }
     }
+    b
+}
+
+fn play() -> bool {
+    let mut b = makegoodboard(); 
     let mut pos = (ROWS/2, COLS/2);
     println!("{}", b);
     
@@ -33,7 +38,9 @@ fn main() {
     }
     println!("{}", b);
 
-    if res {
-        println!("RIP :(");
-    }
+    return !res; // Returns true if won
+}
+
+fn main() {
+    while !play() {}
 }
