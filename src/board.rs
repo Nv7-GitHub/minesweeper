@@ -16,9 +16,11 @@ impl Board {
         // Place mines
         let mut b = Self::default();
         let mut rng = rand::thread_rng();
-        for _ in 0..MINES { // TODO: Don't allow mines to be on top of each other
+        let mut added = 0;
+        while added < MINES {
             let r = rng.gen_range(0..ROWS);
             let c = rng.gen_range(0..COLS);
+            if b.mines[r][c] {continue;}
             b.mines[r][c] = true;
 
             // Update count
@@ -33,6 +35,8 @@ impl Board {
                     b.nums[row as usize][col as usize] += 1;
                 }
             }
+
+            added += 1;
         }
         b
     }

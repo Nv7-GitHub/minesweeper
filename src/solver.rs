@@ -76,19 +76,22 @@ pub fn solve(board: &mut Board) -> (usize, usize) {
     }
 
     // If unsolvable, try to optimize for least positive vars
-    for cnt in 2..vars.len() {
-        for i in 0..eqs.len() {
-            let numvars = m.row(i).iter().filter(|x| **x == 1.0).count();
-            let numneg = m.row(i).iter().filter(|x| **x < 0.0).count();
-            if numvars == cnt && numneg == 0 {
-                let var = m.row(i).iter().position(|x| *x == 1.0).unwrap();
-                if mines.contains(&var) {
-                    continue;
+    for bad in 0..2 { // First ignore negative variables, then accept them
+        for cnt in 2..vars.len() {
+            for i in 0..eqs.len() {
+                let numvars = m.row(i).iter().filter(|x| **x == 1.0).count();
+                let numneg = m.row(i).iter().filter(|x| **x < 0.0).count();
+                if numvars == cnt && (numneg == 0 || bad == 1) {
+                    let var = m.row(i).iter().position(|x| *x == 1.0).unwrap();
+                    if mines.contains(&var) {
+                        continue;
+                    }
+                    println!("GUESS");
+                    return vars[var];
                 }
-                println!("GUESS");
-                return vars[var];
             }
         }
+        println!("MOVING TO BAD GUESS")
     }
     
     panic!("UNSOLVABLE");
