@@ -6,6 +6,8 @@ mod board;
 use board::*;
 
 fn main() {
-    let b = Board::new();
+    let mut b = Board::new();
+    println!("{}", b);
+    b.click(0, 0);
     println!("{}", b);
 }

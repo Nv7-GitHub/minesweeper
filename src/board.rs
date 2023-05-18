@@ -37,9 +37,33 @@ impl Board {
         }
         b
     }
+
+    pub fn click(&mut self, r: usize, c: usize) -> bool {
+        if self.open[r][c] {return self.mines[r][c]};
+        self.open[r][c] = true;
+        if self.mines[r][c] { // Its a mine!
+            return true;
+        }
+        if self.nums[r][c] == 0 { // Flood open
+            for row in (r as i32)-1..(r as i32)+2 {
+                for col in (c as i32)-1..(c as i32)+2 {
+                    if row < 0 || row >= ROWS as i32 {
+                        continue;
+                    }
+                    if col < 0 || col >= COLS as i32 {
+                        continue;
+                    }
+                    if row == r as i32 && col == c as i32{
+                        continue;
+                    }
+                    self.click(row as usize, col as usize);
+                }
+            }
+        }
+        false
+    }
 }
 
-// manually for the type.
 impl std::fmt::Display for Board {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         for r in 0..ROWS {
