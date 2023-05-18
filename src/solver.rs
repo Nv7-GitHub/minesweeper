@@ -61,17 +61,23 @@ pub fn solve(board: &mut Board) -> (usize, usize) {
     // Search for solutions
     for i in 0..eqs.len() {
         let numvars = m.row(i).iter().filter(|x| **x == 1.0).count();
-        if numvars == 1 && m[(i, vars.len())] == 0.0 {
+        let numneg = m.row(i).iter().filter(|x| **x < 0.0).count();
+        if numvars > 0 && m[(i, vars.len())] == 0.0 && numneg == 0 {
             let var = m.row(i).iter().position(|x| *x == 1.0).unwrap();
             return vars[var];
         }
     }
 
-    // UNSOLVABLE??
-    for i in 0..eqs.len() {
-        let numvars = m.row(i).iter().filter(|x| **x == 1.0).count();
-        if numvars == 1 {
-            println!("{:?}", m.row(i));
+    // If unsolvable, try to optimize for least positive vars
+    for cnt in 2..vars.len() {
+        for i in 0..eqs.len() {
+            let numvars = m.row(i).iter().filter(|x| **x == 1.0).count();
+            let numneg = m.row(i).iter().filter(|x| **x < 0.0).count();
+            if numvars == cnt && numneg == 0 {
+                let var = m.row(i).iter().position(|x| *x == 1.0).unwrap();
+                println!("GUESS");
+                return vars[var];
+            }
         }
     }
     
